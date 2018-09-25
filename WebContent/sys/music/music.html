@@ -1,0 +1,578 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../../css/css/bootstrap.min.css"/>
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+		<title></title>
+		<style type="text/css">
+			body{
+				color: dimgrey
+			}
+			
+			
+			#top{
+				height: 300px;
+				margin-top: 50px;
+				background: gray;
+				color: #fff;
+				text-align: center;
+				line-height: 300px;
+			}
+			.searchbar{
+				border: 2px solid gray;
+				width: 200px;
+				margin: 20px 0 20px auto;
+				border-radius: 5px 20px 20px 5px;
+			}
+			.searchbar input{
+				display: inline;
+				height: 30px;
+				border-width: 0;
+				border-radius:5px 0 0 5px;
+				color: gray;
+				outline: none;
+				font-size: 16px;
+			}
+			.searchbar input:focus .searchbar{
+				border: 1px solid #00BFFF;
+			}
+			.searchbar i:hover{
+				cursor: pointer;
+			}
+			
+			
+			.musicbar{
+				background: black;
+				color: #d6d6d6;
+				font-size: 18px;
+			}
+			.musicbar > td{
+				border-right: 2px solid #fff;
+			}
+			.musicbar > td:hover{
+				color: #fff;
+			}
+			
+			.musicItem{
+				border-width: 2px;
+			}
+			.musicItem:hover{
+				border: 2px solid #5BC0DE;
+			}
+			.musicItem > td{
+				border-right: 1px solid #F2DEDE;
+			}
+			
+			.mid{
+				display: none;
+			}
+			
+			
+			.addtag{
+				display:flex;
+				visibility: hidden;
+				height: 20px;
+			}
+			.addtag:hover{
+				cursor: pointer;
+			}
+			.addtag:before,
+			.addtag:after{
+				display: inline-block;
+				position: relative;
+				visibility: visible;
+				width: 6px;
+				height: 4px;
+				content: "";
+				top: 6px;
+				background: gray;
+			}
+			.addtag > i{
+				display: inline-block;
+				visibility: visible;
+				width: 4px;
+				height: 16px;
+				background: gray;
+			}
+			
+			
+			
+			
+			#addmenu{
+				position: fixed;
+				visibility: hidden;
+				width: 700px;
+				height: 600px;
+				background: #80808045;
+				top:0;
+				left: 0;
+			}
+			#addmenu > div{
+				width: 350px;
+				background: #d4d0a0;
+				border-radius: 5px;
+				margin: 200px auto;
+			}
+			.menuclose{
+				width: 35px;
+				height: 25px;
+				border-radius: 3px;
+				margin: 7px 7px auto auto;
+				background: #fff;
+				text-align: center;
+				line-height: 25px;
+				font-size: 12px;
+			}
+			.menuclose:hover{
+				background:gray;
+				color: #fff;
+			}
+			
+			
+			
+			#files{
+				border-top: 2px solid #fff;
+				margin-top: 5px;
+			}
+			#files ul{
+				position: relative;
+				width: 60%;
+				left: 20%;
+			}
+			#files li{
+				border-width: 2px;
+				margin-top: 10px;
+				border-radius: 5px;
+				text-align: center;
+			}
+			#files li:hover{
+				border: 2px solid #00BFFF
+			}
+			
+			
+			#createfile{
+				border-top: 2px solid #fff;
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
+			#createfile > input{
+				width: 180px;
+				height: 33px;
+				border-radius: 4px;
+				border: 1px solid #d6d6d6;
+				margin-left: 52px;
+				margin-right: 11px;
+				background: #fbfbfb;
+			}
+			#createfile > input:focus{
+				border-color: #00BFFF;
+			}
+			#createfile > button{
+				width: 50px;
+				height: 30px;
+				border-radius: 5px;
+				border-width: 1px;
+				border-color: #fff;
+				margin-left: 10px;
+				margin-right: auto;
+				background: #fff;
+			}
+			#createfile > button:hover{
+				border-color: #00BFFF;
+			}
+			
+			
+			#nav_bottom{
+				float:right;
+				margin-top: 30px;
+				list-style-type: none;
+			}
+			
+			#nav_bottom > li{
+				float:left;
+				width: 45px;
+				height: 28px;
+				border-right: 1px solid #fff;
+				text-align: center;
+				line-height: 28px;
+				font-size: 12px;
+			}
+			#nav_bottom > li:hover{
+				border: 1px solid #00BFFF;
+				border-radius: 5px;
+			}
+			#nav_bottom > li:first-child:hover{
+				border-width: 0;
+			}
+			
+			
+			
+			.popupWindow{
+				position: absolute;
+				width: 300px;
+				height: 100px;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				background: yellow;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div id="top" class="col-lg-12">图片</div>
+			
+			<div id="centern" class="col-lg-12">
+				<!-- 音乐搜索栏 -->
+				<div class="searchbar">
+					<input value="" placeholder="音乐查找"/>
+					<i class="fa fa-search" aria-hidden="true" onclick="searchMusic(e)"></i>
+				</div>
+				
+				<!-- 音乐数据展示 -->
+				<table class="table table-striped">
+					<thead style=>
+						<tr class="musicbar">
+							<td>专辑</td>
+							<td>音乐名</td>
+							<td>歌手</td>
+							<td>...</li>
+							<td>操作</li>
+						</tr>
+						<tr style="height: 10px;"></tr>
+					</thead>
+					<tbody id="musicdata">
+						<tr class="musicItem">
+							<td>专辑一</td>
+							<td>随心去远方</td>
+							<td>灵魂歌手</td>
+							<td>...</td>
+							<td class="mid">id</td>
+							<td><div class="addtag" onclick="openAddMenu(this)"><i></i></div></td>
+						</tr>
+						<tr class="musicItem">
+							<td>专辑一</td>
+							<td>随心去远方</td>
+							<td>灵魂歌手</td>
+							<td>...</td>
+							<td class="mid">id</td>       
+							<td><div class="addtag" onclick="openAddMenu(this)"><i></i></div></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<ul id="nav_bottom">
+					<li>总条数</li>
+					<li value="0" onclick="pageChosed(this)">首页</li>
+					<li value="" onclick="pageChosed(this)">上一页</li>
+					<li value="" onclick="pageChosed(this)">1</li>
+					<li value="" onclick="pageChosed(this)">2</li>
+					<li value="" onclick="pageChosed(this)">3</li>
+					<li value="" onclick="pageChosed(this)">下一页</li>
+					<li value="" onclick="pageChosed(this)">尾页</li>
+				</ul>
+			</div>
+		</div>
+		
+		<!--操作菜单显示-->
+		<div id="addmenu">
+			<div>
+				<div class="menuclose" onclick="closeAddMenu()">关闭</div>
+				<div id="files">
+					<ul class="list-group">
+						<li class="list-group-item" onclick="choseFolder(this)">文件夹一</li>
+						<li class="list-group-item" onclick="choseFolder(this)">文件二</li>
+						<li class="list-group-item" onclick="choseFolder(this)">文件夹三</li>
+						<li class="list-group-item" onclick="choseFolder(this)">文件四</li>
+					</ul>
+				</div>
+				<div id="createfile">
+					<input type="text" placeholder="文件夹名字"/>
+					<button onclick="">创建</button>
+				</div>
+			</div>
+		</div>
+		
+		
+		<!--音乐搜索结果展示-->
+		<div class="popupWindow">
+			<div onclick="javascript:function(this){this.parentNode.style.visibility = "hidden"}">关闭</div>
+			<table id="searchMusic" class="table table-striped">
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>
+
+<script type="text/javascript">
+	/**
+	 * 全局变量
+	 */
+	var musicId;//音乐id
+	
+	
+	function initial(){
+		
+	}
+	
+	/**
+	 * 打开菜单
+	 */
+	function openAddMenu(e){
+		//初始化文件夹
+		//initializeFolder();
+		
+		musicId = e.parentNode.parentNode.getElementsByClassName("mid")[0].innerText;
+		
+		var addmenu = document.getElementById("addmenu");
+		addmenu.style.width = document.body.clientWidth + "px";
+		addmenu.style.height = window.screen.availHeight + "px";
+		addmenu.style.visibility = "visible";
+		
+	}
+	
+	/**
+	 * 关闭菜单
+	 */
+	function closeAddMenu(){
+		var addmenu = document.getElementById("addmenu");
+		addmenu.style.visibility = "hidden";
+	}
+	
+	/**
+	 * 初始化菜单里的文件夹
+	 */
+	function initializeFolder(){
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "url", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.send();
+		
+		xhr.onreadystatechange = function(){
+			if(xhr.status == 200 && xhr.readyState == 4){
+				var content = xhr.responseText;
+				if(content){
+					createFolder(content);
+				}else{
+					alert("数据获取失败");
+					closeAddMenu();
+				}
+			}
+		}
+	}
+	
+	function createFolder(xmlstr){
+		var datas = new DOMParser.parseFromString(xmlstr, "text/xml").getElementsByTagName("ul")[0];
+		datas = datas.getElementsByTagName("li");
+		/**
+		 * 注意：对ul标签区分
+		 */
+		var files = document.getElementById("files");
+		for(var i = 0, elem1; elem1 = datas[i]; ++i){
+			var li = document.createElement("li");
+			li.innerText = elem1.textContent;
+			li.className = "list-group-item";
+			files.appendChild(li);
+		}
+		
+		
+	}
+	
+	function choseFolder(e){
+		
+		if(musicId){
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "url", true);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.send("musicId=" + musicId + "&folder=" + e.innerText);
+			
+			xhr.onreadystatechange = function(){
+				if(xhr.status == 200 && xhr.readyState == 4){
+					var content = xhr.responseText.getElementsByTagName("message");
+					alert(content.textContent)
+				}
+			}
+		}
+		musicId = undefined;
+		closeAddMenu();
+	}
+	
+	
+	/**
+	 * 添加歌曲列表
+	 */
+	function addMusicData(){
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "../jsp/music.html", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.send();
+		
+		xhr.onreadystatechange = function(){
+			if(xhr.status == 200 && xhr.readyState == 4){
+				var content = xhr.responseText;
+				if(content){
+					addElementFromXML(content);
+				}else{
+					alert("数据获取失败");
+				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * 添加歌曲列表
+	 * @param {Object} xmlstr
+	 */
+	function addElementFromXML(xmlstr){
+		var parent = document.getElementById("musicdata");
+		var elems = new DOMParser().parseFromString(xmlstr, "text/xml");
+		
+		elems = elems.getElementsByTagName("tr");
+		for(var i = 0, elem1; elem1 = elems[i]; ++i){
+			var tem;
+			var td;
+			var tr = document.createElement("tr");
+			
+			tr.className = "musicItem";
+			
+			elem1 = elem1.getElementsByTagName("td");
+			for(var j = 0, elem2; elem2 = elem1[j]; ++j){
+				td = document.createElement("td");
+				td.innerText = elem2.textContent;
+				tr.appendChild(td);
+			}
+			td.className = "mid";
+			
+			elem1 = document.createElement("td");
+			tr.appendChild(elem1);
+			
+			tem = document.createElement("div");
+			elem1.appendChild(tem);
+			elem1 = document.createElement("i");
+			tem.appendChild(elem1);
+			tem.className = "addtag";
+			tem.onclick = openAddMenu;
+			
+			parent.appendChild(tr);
+		}
+	}
+	
+	
+	/**
+	 * 分页
+	 * @param {Object} e
+	 */
+	function pageChosed(e){
+		var xhr = new XMLHttpRequest();
+		
+		xhr.open("POST", "url", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.send("page=" + e.value);
+		
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState == 4 && xhr.status == 200){
+				var i, tem, lastli;
+				var datas = new Array();
+				var ulparent = document.getElementById("nav_bottom");
+				var lichild = ulparent.getElementsByTagName("li");
+				for(i = lichild.length - 1; i > 2; --i){
+					ulparent.remove(lichild[i - 1]);
+				}
+				lastli = lichild[2];
+				ulparent.remove(lastli);
+				
+				var content = xhr.responseText;
+				content = new DOMParser.parseFromString(content, "text/xml");
+				
+				content = content.getElementsByTagName("ul")[0].getElementsByTagName("li");
+				for(i = 0, elem1; elem1 = contet[i]; ++i){
+					datas[i] = parseInt(elem1.textContent);
+				}
+				
+				tem = (datas[1] * datas[2]) + "/" + (datas[0]);
+				lichild[0].innerText = tem;
+				tem = (datas[0] /datas[2]);
+				if((tem - (tem | 0)) > 0){
+					tem = (tem | 0) + 1;
+				}
+				lastli.value = tem;
+				
+				if(datas[1] > 0){
+					tem = document.createElement("li");
+					tem.value = datas[1] - 1;
+					tem.innerText = "上一页";
+					ulparent.appendchild(tem);
+				}
+				
+				for(i = 0, tem = datas[1] * datas[2], li; i < 3 && datas[0] > tem; ++i, tem += datas[2]){
+					li = document.createElement("li");
+					li.value = datas[1] + i;
+					li.innerText = li.value + 1;
+					ulparent.appendChild(li);
+				}
+				if(i > 1){
+					tem = document.createElement("li");
+					tem.value = datas[1] + 1;
+					tem.innerText = "下一页";
+					ulparent.appendchild(tem); 
+				}
+				
+				ulparent.appendChild(lastli);
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+	 * 音乐搜索函数
+	 * @param {Object} e
+	 */
+	function searchMusic(e){
+		var value = e.parentNode.getElementsByTagName("input")[0].value;
+		var xhr = new XMLHttpRequest();
+		
+		xhr.open("POST", "url", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.send("");
+		
+		xhr.onreadystatechange = function(){
+			if(xhr.status == 200 && xhr.readyState == 4){
+				var content = xhr.responseText;
+				content = JSON.parse(content);
+				
+				var searchMusic = document.getElementById("searchMusic").getElementsByTagName("tr")[0].getElementsByTagName("td");
+				
+				if(/*标志*/){
+					searchMusic[].innerText = content.;
+					searchMusic[].innerText = content.;
+					searchMusic[].innerText = content.;
+					searchMusic[].innerText = content.;
+					searchMusic[].innerText = content.;
+					searchMusic[].innerText = content.;
+					
+					searchMusic.style.visibility = "visible";
+				}else{
+					alert("音乐没找到");
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+//addMusicData()
+</script>
